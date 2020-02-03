@@ -15,7 +15,7 @@ RUN mkdir /tmp/distr && cd /tmp/distr
 
 # Download sources
 RUN wget http://ftp.gnu.org/gnu/binutils/binutils-2.30.tar.bz2 \
-    && wget http://ftp.acc.umu.se/mirror/gnu.org/gnu/gcc/gcc-$(GCC_VERSION)/gcc-$(GCC_VERSION).tar.xz \
+    && wget http://ftp.acc.umu.se/mirror/gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
     && wget http://download.savannah.gnu.org/releases/avr-libc/avr-libc-2.0.0.tar.bz2
 
 # Building binutils
@@ -25,7 +25,7 @@ RUN bunzip2 -c binutils-2.30.tar.bz2 | tar xf - && cd binutils-2.30 \
     && make -j${NPROC} && make install && cd ../.. \
 
 # Build gcc
-RUN tar -xvf gcc-$(GCC_VERSION).tar.xz && cd gcc-$(GCC_VERSION) \
+RUN tar -xvf gcc-${GCC_VERSION}.tar.xz && cd gcc-${GCC_VERSION} \
     && mkdir build && cd build \
     && ../configure --prefix=/usr/local/avr --target=avr --enable-languages=c,c++ --disable-nls --disable-libssp --with-dwarf2 \
     && make -j${NPROC} && make install && cd ../.. \
