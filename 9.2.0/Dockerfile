@@ -8,10 +8,10 @@ RUN apk add --no-cache openssl bash git gcc g++ libc-dev gmp-dev mpfr-dev mpc1-d
 RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1)
 
 # Create var to gcc version to compile
-RUN GCC_VERSION=9.2.0
+RUN GCC_VERSION="9.2.0"
 
 # Create build folder
-RUN mkdir /tmp/distr && cd /tmp/distr 
+RUN mkdir /tmp/distr && cd /tmp/distr
 
 # Download sources
 RUN wget http://ftp.gnu.org/gnu/binutils/binutils-2.30.tar.bz2 \
@@ -28,7 +28,7 @@ RUN bunzip2 -c binutils-2.30.tar.bz2 | tar xf - && cd binutils-2.30 \
 RUN tar -xvf gcc-${GCC_VERSION}.tar.xz && cd gcc-${GCC_VERSION} \
     && mkdir build && cd build \
     && ../configure --prefix=/usr/local/avr --target=avr --enable-languages=c,c++ --disable-nls --disable-libssp --with-dwarf2 \
-    && make -j${NPROC} && make install && cd ../.. \
+    && make -j${NPROC} && make install && cd ../..
 
 # Building avr-libc
 RUN bunzip2 -c avr-libc-2.0.0.tar.bz2 | tar xf - && cd avr-libc-2.0.0 \
