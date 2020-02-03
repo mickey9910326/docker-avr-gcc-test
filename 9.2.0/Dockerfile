@@ -1,31 +1,29 @@
 FROM alpine:3.7
 
 ENV PATH $PATH:/usr/local/avr/bin
+ENV AVR_GCC_VER=9.2.0
 
 RUN apk add --no-cache openssl bash git gcc g++ libc-dev gmp-dev mpfr-dev mpc1-dev make cmake
 
 # Create var to save the number of processing units available
 RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1)
 
-# Create var to gcc version to compile
-RUN GCC_VERSION="9.2.0"
-
 # Create build folder
 RUN mkdir /tmp/distr && cd /tmp/distr
 
 # Download sources
 RUN wget http://ftp.gnu.org/gnu/binutils/binutils-2.30.tar.bz2 \
-    && wget http://ftp.acc.umu.se/mirror/gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
+    && wget http://ftp.acc.umu.se/mirror/gnu.org/gnu/gcc/gcc-${AVR_GCC_VER}/gcc-${AVR_GCC_VER}.tar.xz \
     && wget http://download.savannah.gnu.org/releases/avr-libc/avr-libc-2.0.0.tar.bz2
 
 # Building binutils
 RUN bunzip2 -c binutils-2.30.tar.bz2 | tar xf - && cd binutils-2.30 \
     && mkdir build && cd build \
     && ../configure --prefix=/usr/local/avr --target=avr --disable-nls \
-    && make -j${NPROC} && make install && cd ../.. \
+    && make -j${NPROC} && make install && cd ../..
 
 # Build gcc
-RUN tar -xvf gcc-${GCC_VERSION}.tar.xz && cd gcc-${GCC_VERSION} \
+RUN tar -xvf gcc-${AVR_GCC_VER}.tar.xz && cd gcc-${AVR_GCC_VER} \
     && mkdir build && cd build \
     && ../configure --prefix=/usr/local/avr --target=avr --enable-languages=c,c++ --disable-nls --disable-libssp --with-dwarf2 \
     && make -j${NPROC} && make install && cd ../..
