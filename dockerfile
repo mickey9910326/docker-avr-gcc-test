@@ -10,8 +10,16 @@ RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && mkdir /tmp/dis
 #
 # Download sources
 #
+&& wget http://ftp.gnu.org/gnu/binutils/binutils-2.30.tar.bz2 \
 && wget http://ftp.acc.umu.se/mirror/gnu.org/gnu/gcc/gcc-8.1.0/gcc-8.1.0.tar.xz \
 && wget http://download.savannah.gnu.org/releases/avr-libc/avr-libc-2.0.0.tar.bz2 \
+#
+# Building binutils
+#
+&& bunzip2 -c binutils-2.30.tar.bz2 | tar xf - && cd binutils-2.30 \
+&& mkdir build && cd build \
+&& ../configure --prefix=/usr/local/avr --target=avr --disable-nls \
+&& make -j${NPROC} && make install && cd ../.. \
 #
 # Build gcc
 #
@@ -26,8 +34,4 @@ RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && mkdir /tmp/dis
 && ./configure --prefix=/usr/local/avr --build=`./config.guess` --host=avr \
 && make -j${NPROC} && make install && cd ../.. \
 && rm -rf /tmp/distr \
-&& apk del openssl libc-dev gmp-dev mpfr-dev mpc1-dev \
-#
-# Install python module
-#
-&& python3 -m pip install requests 
+&& apk del openssl libc-dev gmp-dev mpfr-dev mpc1-dev
