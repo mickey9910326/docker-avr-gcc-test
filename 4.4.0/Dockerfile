@@ -1,9 +1,7 @@
 FROM alpine:3.7
 
 ENV PATH $PATH:/usr/local/avr/bin
-ARG AVR_GCC_VER
 ENV AVR_GCC_VER=4.4.0
-RUN wget http://ftp.acc.umu.se/mirror/gnu.org/gnu/gcc/gcc-${AVR_GCC_VER}/gcc-${AVR_GCC_VER}.tar.gz
 
 RUN apk add --no-cache openssl bash git gcc g++ libc-dev gmp-dev mpfr-dev mpc1-dev make cmake
 
@@ -15,7 +13,7 @@ RUN mkdir /tmp/distr && cd /tmp/distr
 
 # Download sources
 RUN wget http://ftp.gnu.org/gnu/binutils/binutils-2.30.tar.bz2 \
-    && wget http://ftp.acc.umu.se/mirror/gnu.org/gnu/gcc/gcc-${AVR_GCC_VER}/gcc-${AVR_GCC_VER}.tar.xz \
+    && wget http://ftp.acc.umu.se/mirror/gnu.org/gnu/gcc/gcc-${AVR_GCC_VER}/gcc-${AVR_GCC_VER}.tar.gz \
     && wget http://download.savannah.gnu.org/releases/avr-libc/avr-libc-2.0.0.tar.bz2
 
 # Building binutils
