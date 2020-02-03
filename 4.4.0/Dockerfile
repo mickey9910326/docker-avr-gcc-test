@@ -1,7 +1,9 @@
 FROM alpine:3.7
 
 ENV PATH $PATH:/usr/local/avr/bin
+ARG AVR_GCC_VER
 ENV AVR_GCC_VER=4.4.0
+RUN wget http://ftp.acc.umu.se/mirror/gnu.org/gnu/gcc/gcc-${AVR_GCC_VER}/gcc-${AVR_GCC_VER}.tar.gz
 
 RUN apk add --no-cache openssl bash git gcc g++ libc-dev gmp-dev mpfr-dev mpc1-dev make cmake
 
