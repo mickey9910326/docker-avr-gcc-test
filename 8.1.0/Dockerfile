@@ -24,7 +24,7 @@ RUN bunzip2 -c binutils-${BINUTILS_VER}.tar.bz2 | tar xf - && cd binutils-${BINU
     && make -j${NPROC} && make install && cd ../..
 
 # Build gcc
-RUN tar -xvf gcc-${AVR_GCC_VER}.tar.xz && cd gcc-${AVR_GCC_VER} \
+RUN tar -xf gcc-${AVR_GCC_VER}.tar.xz && cd gcc-${AVR_GCC_VER} \
     && mkdir build && cd build \
     && ../configure --prefix=/usr/local/avr --target=avr --enable-languages=c,c++ --disable-nls --disable-libssp --with-dwarf2 \
     && make -j${NPROC} && make install && cd ../..
