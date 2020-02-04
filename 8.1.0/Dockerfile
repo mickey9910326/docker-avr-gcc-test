@@ -2,6 +2,7 @@ FROM alpine:3.7
 
 ENV PATH $PATH:/usr/local/avr/bin
 ENV AVR_GCC_VER=8.1.0
+ENV BINUTILS_VER=2.30
 
 RUN apk add --no-cache openssl bash git gcc g++ libc-dev gmp-dev mpfr-dev mpc1-dev make cmake
 
@@ -12,12 +13,12 @@ RUN NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1)
 RUN mkdir /tmp/distr && cd /tmp/distr
 
 # Download sources
-RUN wget http://ftp.gnu.org/gnu/binutils/binutils-2.30.tar.bz2 \
+RUN wget http://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.bz2 \
     && wget http://ftp.acc.umu.se/mirror/gnu.org/gnu/gcc/gcc-${AVR_GCC_VER}/gcc-${AVR_GCC_VER}.tar.xz \
     && wget http://download.savannah.gnu.org/releases/avr-libc/avr-libc-2.0.0.tar.bz2
 
 # Building binutils
-RUN bunzip2 -c binutils-2.30.tar.bz2 | tar xf - && cd binutils-2.30 \
+RUN bunzip2 -c binutils-${BINUTILS_VER}.tar.bz2 | tar xf - && cd binutils-${BINUTILS_VER} \
     && mkdir build && cd build \
     && ../configure --prefix=/usr/local/avr --target=avr --disable-nls \
     && make -j${NPROC} && make install && cd ../..
